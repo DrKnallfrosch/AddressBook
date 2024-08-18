@@ -31,7 +31,7 @@ class AddressBook:
             raise e
 
     def __str__(self):
-        return (f"Name: {self.firstname} {self.lastname}\nAddress: {self.street} {self.number}, {self.postal_code} "
+        return (f"Name: {self.firstname} {self.lastname} {self.birthdate}\nAddress: {self.street} {self.number}, {self.postal_code} "
                 f"{self.place}\nContact: {self.phone} {self.email}\n")
 
 

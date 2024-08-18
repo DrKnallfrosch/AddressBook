@@ -1,8 +1,9 @@
 from datetime import datetime, date
 from pydantic.dataclasses import dataclass
-from pydantic import field_validator, PositiveInt, validate_email
+from pydantic import field_validator, PositiveInt
 from typing import Optional
 from dataclasses import field
+from email_validator import validate_email, EmailNotValidError
 
 
 @dataclass(order=True)
@@ -21,10 +22,13 @@ class AddressBook:
     def validate_birthdate(cls, value) -> date:
         return datetime.strptime(value, "%Y-%m-%d").date()
 
-    # TODO
     @field_validator('email')
-    def validate_email(cls, value):
-        pass
+    def get_validate_email(cls, value):
+        try:
+            validate_email(value, check_deliverability=True)
+            return value
+        except EmailNotValidError as e:
+            raise e
 
     def __str__(self):
         return (f"Name: {self.firstname} {self.lastname}\nAddress: {self.street} {self.number}, {self.postal_code} "
@@ -33,7 +37,7 @@ class AddressBook:
 
 if __name__ == '__main__':
     a1 = AddressBook('Henri', 'Henrison', 'ABC-Street', '10', 11111, 'Berlin', '2001-12-01', '12345678',
-                     'a@mail.com')
+                     '123@gmail.com')
     a2 = AddressBook('Henri', 'Henrison', 'ABC-Street', '12a', 11111, 'Berlin')
 
     a3 = AddressBook('Henri', 'Henrison', 'ABC-Street', '10', 11111, 'Berlin', '2001-12-01', '12345678',

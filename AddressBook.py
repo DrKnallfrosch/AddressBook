@@ -3,7 +3,7 @@ from pydantic.dataclasses import dataclass
 from pydantic import field_validator, PositiveInt
 from typing import Optional
 from dataclasses import field
-from email_validator import validate_email, EmailNotValidError
+from email_validator import validate_email, EmailNotValidError, EmailSyntaxError
 
 
 @dataclass(order=True)
@@ -27,6 +27,8 @@ class AddressBook:
         try:
             validate_email(value, check_deliverability=True)
             return value
+        except EmailSyntaxError as e:
+            print('Email syntax error', e)
         except EmailNotValidError as e:
             raise e
 

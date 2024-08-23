@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from AddressBook import Address
+from AddressBook import AddressBook
 
  
 class AddressContainerInterface(ABC):
@@ -21,7 +21,7 @@ class AddressContainerInterface(ABC):
         pass
 
     @abstractmethod
-    def get_address(self, address_id: int) -> Address:
+    def get_address(self, address_id: int) -> AddressBook:
         pass
 
     @abstractmethod

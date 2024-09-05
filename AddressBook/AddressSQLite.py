@@ -1,15 +1,17 @@
-import AddressContainerInterface
-import AddressBook
 import sqlite3
-import os
 import tkinter as tk
 from tkinter import filedialog
 
-class AddressSQLite(AddressContainerInterface.AddressContainerInterface):
-    def __init__(self, mode = 1):
-        self.filepath = filedialog.askopenfilename()
+import AddressBook
+from AddressContainerInterface import AddressContainerInterface
+
+
+class AddressSQLite(AddressContainerInterface):
+    def __init__(self, mode=True, table="AddressBook"):
+        self.filepath = self.set_filepath(mode)
         self.conn = sqlite3.connect(self.filepath)
         self.cursor = self.conn.cursor()
+        self.table = table
 
     def set_filepath(self, mode: bool = 1):
         root = tk.Tk()
@@ -20,21 +22,14 @@ class AddressSQLite(AddressContainerInterface.AddressContainerInterface):
                 defaultextension=".db",
                 filetypes=[("SQLite database files", "*.db"), ("All files", "*.*")]
             )
-            try:
-                print(f"Created file at {filepath}")
-            except:
-                print("Failed to create file")
+            print(f"Created file at {filepath}")
 
         else:
             filepath = filedialog.askopenfilename(
                 title="Select SQLite Database File",
                 filetypes=[("SQLite Database Files", "*.db *.sqlite *.sqlite3"), ("All Files", "*.*")]
             )
-            try:
-                print(f"Opened file {filepath}")
-            except:
-                print("Failed to open file")
-
+            print(f"Opened file {filepath}")
         return filepath
 
     def read(self):
@@ -43,11 +38,23 @@ class AddressSQLite(AddressContainerInterface.AddressContainerInterface):
     def save(self):
         pass
 
-    def search(self, search_string: str) -> dict:
-        pass
+    def search(self, search_string: str, columns: list = ["all"], exact: bool = 0) -> dict:
+        if columns == ["all"]:
+            columns = ["id", "first_name", "last_name", "street", "number",
+                       "postal_code", "place", "birthdate", "phone", "email"]
+        columns = f" LIKE '%{search_string}%' OR ".join(columns)
+        self.cursor.execute(f"SELECT * FROM {self.table} WHERE {columns} LIKE '%{search_string}%';")
+        data = {}
+        print(self.cursor.fetchall()[0])
+        for i in self.cursor.fetchall():
+            data.update({i[0]: i[1:]})
+        return data
 
-    def add_address(self, address) -> int:
-        pass
+    def add_address(self, data) -> int:
+
+        self.cursor.execute(f'''
+        INSERT INTO {self.table} (first_name, last_name, street, number, postal_code, place, birthdate, phone, email)
+        VALUES ()''')
 
     def delete_address(self, address_id: int) -> int:
         pass
@@ -65,9 +72,8 @@ class AddressSQLite(AddressContainerInterface.AddressContainerInterface):
         pass
 
     def setup_tables(self):
-        self.cursor = self.conn.cursor()
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS AddressBook (
+        self.cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS {self.table} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
@@ -83,5 +89,6 @@ class AddressSQLite(AddressContainerInterface.AddressContainerInterface):
         self.conn.commit()
 
 
-a = AddressSQLite()
+a = AddressSQLite(mode=0, table="AddressBook")
 a.setup_tables()
+print(a.search(input("Search string: ")))

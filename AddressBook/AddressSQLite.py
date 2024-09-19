@@ -1,11 +1,10 @@
 from AddressContainerInterface import AddressContainerInterface
-import AddressBook
+from AddressBook import AddressBook
 import sqlite3
 
 
 class AddressSQLite(AddressContainerInterface):
-    def __init__(self, filepath:str = None, tablename="AddressBook"):
-
+    def __init__(self, filepath: str = None, tablename="AddressBook"):
         self.filepath = filepath
         self.conn = None
         self.cursor = None
@@ -19,22 +18,32 @@ class AddressSQLite(AddressContainerInterface):
             try:
                 self.conn = sqlite3.connect(self.filepath)
                 self.cursor = self.conn.cursor()
+                self.setup_tables()
             except sqlite3.Error as e:
                 print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
+            except Exception as e:
+                print(e)
 
     def close(self):
-        self.cursor.close()
-        self.conn.close()
+        try:
+            if self.conn:
+                self.cursor.close()
+                self.conn.close()
+        except sqlite3.Error as e:
+            print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
 
     def save(self):
-        pass # might need implementation
+        try:
+            self.conn.commit()
+        except sqlite3.Error as e:
+            print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
 
     def search(self, search_string: str) -> dict:
-        columns = ["id", "first_name", "last_name", "street", "number",
+        columns = ["first_name", "last_name", "street", "number",
                    "postal_code", "place", "birthdate", "phone", "email"]
         columns = f" LIKE '%{search_string}%' OR ".join(columns)
         self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE {columns} LIKE '%{search_string}%';")
-        return {elements[0]: elements[1:] for elements in self.cursor.fetchall()}
+        return {elements[0]: AddressBook(elements[1:]) for elements in self.cursor.fetchall()}
 
     def delete(self, address_id: int) -> int:
         try:
@@ -54,11 +63,12 @@ class AddressSQLite(AddressContainerInterface):
         except sqlite3.Error:
             raise KeyError
 
-    def add_address(self, data: tuple) -> int:
+    def add_address(self, address: AddressBook) -> int:
         try:
             self.cursor.execute(f'''
-                        INSERT INTO {self.tablename} (first_name, last_name, street, number, postal_code, place, birthdate, phone, email)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''', data)
+                        INSERT INTO {self.tablename} (first_name, last_name, street, 
+                        number, postal_code, place, birthdate, phone, email)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''', address)
             self.conn.commit()
             return self.cursor.lastrowid
         except sqlite3.Error:
@@ -73,7 +83,8 @@ class AddressSQLite(AddressContainerInterface):
         return {elements[0]: elements[1:] for elements in self.cursor.fetchall()}
 
     def get_todays_birthdays(self) -> dict:
-        self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE strftime('%m-%d', birthdate) = strftime('%m-%d', 'now');")
+        self.cursor.execute(f"SELECT * FROM {self.tablename} "
+                            f"WHERE strftime('%m-%d', birthdate) = strftime('%m-%d', 'now');")
         return {elements[0]: elements[1:] for elements in self.cursor.fetchall()}
 
     def setup_tables(self):
@@ -92,6 +103,21 @@ class AddressSQLite(AddressContainerInterface):
         ''')
         self.conn.commit()
 
-a = AddressSQLite(filepath=r"..\AddressBook\SQLite\addressbook.mp4", tablename="AddressBook")
-a.setup_tables()
-print(a.get_todays_birthdays())
+
+if __name__ == '__main__':
+    a = AddressSQLite()
+    a.set_filepath(r"..\AddressBook\SQL\Addresbook.db")
+    print(a.filepath)
+    a.open()
+    a.save()
+    print(a.get_all())
+    print(a.search("Henri"))
+    # a.delete(2)
+    print(a.get(1))
+    a.update(2, birthdate="2005-06-26")
+    print(a.get(2))
+    b = AddressBook(firstname="Domink", lastname="Hase")
+    a.add_address(b)
+    print(a.get(3))
+    a.update(3, birthdate="2006-09-16")
+    print(a.get_todays_birthdays())

@@ -22,7 +22,7 @@ class AddressContainerInterface(ABC):
         pass
 
     @abstractmethod
-    def search(self, search_string: str) -> dict:
+    def search(self, field: str, search_string: str) -> dict:
         """Search for a string in any field. Return a dictionary with the found addresses. Keys are the ids and
         values the addresses"""
         pass

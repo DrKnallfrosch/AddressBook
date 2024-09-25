@@ -1,5 +1,5 @@
 AddressBook
 ============
 
-.. automodule:: AddressPack.AddressBook
+.. automodule:: AddressBook.AddressBook
    :members:

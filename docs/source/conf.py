@@ -8,10 +8,10 @@
 import os
 import sys
 
-# Add AddressPack module to the system path
+# Add AddressBook module to the system path
 sys.path.insert(0, os.path.abspath('../..'))
 
-project = 'AddressPack'
+project = 'AddressBook'
 copyright = '2024, Tim Schuette, Dominik Elias Hase'
 author = 'Tim Schuette, Dominik Elias Hase'
 release = '1.0'

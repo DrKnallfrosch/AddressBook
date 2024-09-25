@@ -1,4 +1,5 @@
 AddressCSVInterface
 ===================
-.. automodule:: AddressPack.AddressCSVInterface
+
+.. automodule:: AddressBook.AddressCSVInterface
    :members:

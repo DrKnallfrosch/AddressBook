@@ -1,5 +1,5 @@
 AddressContainerInterface
 =========================
 
-.. automodule:: AddressPack.AddressContainerInterface
+.. automodule:: AddressBook.AddressContainerInterface
    :members:

@@ -1,4 +1,5 @@
 AddressSQLite
 =============
-.. automodule:: AddressPack.AddressSQLite
+
+.. automodule:: AddressBook.AddressSQLite
    :members:

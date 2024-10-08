@@ -38,12 +38,22 @@ class AddressSQLite(AddressContainerInterface):
         except sqlite3.Error as e:
             print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
 
-    def search(self, search_string: str) -> dict:
+    def search(self, search_string: str, field: str = "") -> dict[int, AddressBook]:
         columns = ["first_name", "last_name", "street", "number",
                    "postal_code", "place", "birthdate", "phone", "email"]
-        columns = f" LIKE '%{search_string}%' OR ".join(columns)
-        self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE {columns} LIKE '%{search_string}%';")
-        return {elements[0]: AddressBook(elements[1:]) for elements in self.cursor.fetchall()}
+
+        if field and field not in columns:
+            raise ValueError(f"Invalid field: '{field}'. Must be one of {columns}.")
+        elif field:
+            query = f"SELECT * FROM {self.tablename} WHERE {field} LIKE ?;"
+            self.cursor.execute(query, (f"%{search_string}%",))
+        else:
+            query = f"SELECT * FROM {self.tablename} WHERE " + " OR ".join(
+                [f"{col} LIKE ?" for col in columns]
+            ) + ";"
+            search_params = [f"%{search_string}%"] * len(columns)
+            self.cursor.execute(query, search_params)
+        return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
 
     def delete(self, address_id: int) -> int:
         try:
@@ -74,7 +84,7 @@ class AddressSQLite(AddressContainerInterface):
         except sqlite3.Error:
             return False
 
-    def get_all(self) -> dict:
+    def get_all(self) -> dict[int, AddressBook]:
         self.cursor.execute(f"SELECT * FROM {self.tablename}")
         return {elements[0]: elements[1:] for elements in self.cursor.fetchall()}
 
@@ -82,7 +92,7 @@ class AddressSQLite(AddressContainerInterface):
         self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE id = {address_id}")
         return {elements[0]: elements[1:] for elements in self.cursor.fetchall()}
 
-    def get_todays_birthdays(self) -> dict:
+    def get_todays_birthdays(self) -> dict[int, AddressBook]:
         self.cursor.execute(f"SELECT * FROM {self.tablename} "
                             f"WHERE strftime('%m-%d', birthdate) = strftime('%m-%d', 'now');")
         return {elements[0]: elements[1:] for elements in self.cursor.fetchall()}
@@ -106,18 +116,18 @@ class AddressSQLite(AddressContainerInterface):
 
 if __name__ == '__main__':
     a = AddressSQLite()
-    a.set_filepath(r"..\AddressBook\SQL\Addresbook.db")
+    a.set_filepath(r"..\AddressBook\SQLite\addressbook.db")
     print(a.filepath)
     a.open()
     a.save()
     print(a.get_all())
     print(a.search("Henri"))
-    # a.delete(2)
+    a.delete(2)
     print(a.get(1))
     a.update(2, birthdate="2005-06-26")
     print(a.get(2))
     b = AddressBook(firstname="Domink", lastname="Hase")
     a.add_address(b)
     print(a.get(3))
-    a.update(3, birthdate="2006-09-16")
+    a.update(3, birthdate="2006-08-10")
     print(a.get_todays_birthdays())

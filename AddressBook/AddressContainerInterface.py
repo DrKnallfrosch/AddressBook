@@ -113,7 +113,7 @@ class AddressContainerInterface(ABC):
         pass
 
     @abstractmethod
-    def get(self, id_: int) -> Optional[AddressBook]:
+    def get(self, id_: int) -> AddressBook | None:
         """
         Retrieve a specific address by its ID.
 

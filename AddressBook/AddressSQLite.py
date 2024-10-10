@@ -4,7 +4,24 @@ import sqlite3
 
 
 class AddressSQLite(AddressContainerInterface):
+    """
+    Interface for storing and managing Object belonging to the AddressBook Dataclass in SQL-Databases. Every entry gets
+    an id assigned to them as their primary key. Firstname and Lastname are required.
+
+    SQL-Dialect: SQLite.
+
+    Functionalities include loading databases and getting, deleting, adding or updating entries.
+    """
     def __init__(self, filepath: str = None, tablename="AddressBook"):
+        """
+        Initialize the AddressSQLite object with the database filepath and table name. Parameters are optional to allow
+        a file path to be set here or the tablename to be modified.
+        Also initializes the connection and cursor attributes to None.
+
+        Parameters:
+        - filepath (str): The path to the SQLite database file. Defaults to None to make defining it here optional.
+        - tablename (str): The name of the table where the address data will be stored. Defaults to "AddressBook".
+        """
         self.filepath = filepath
         self.conn = None
         self.cursor = None
@@ -185,9 +202,8 @@ class AddressSQLite(AddressContainerInterface):
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE id = {id_}")
         result = self.cursor.fetchone()
-        print(result)
         if result:
-            return {result[0]: AddressBook(*result[1:])}
+            return AddressBook(*result[1:])
         return None
 
 
@@ -237,6 +253,14 @@ class AddressSQLite(AddressContainerInterface):
         """
         self.cursor.execute(f"SELECT id, email FROM {self.tablename} WHERE firstname = ? and lastname = ?;",
                             (address.firstname, address.lastname))
-        if self.cursor.fetchall():
+        result = self.cursor.fetchall()
+        if result and any(item[1] == address.email for item in result):
             return True
         return False
+
+if __name__ == '__main__':
+    a = AddressSQLite()
+    a.set_filepath(r"..\AddressBook\SQLite\AddressBook.db")
+    a.open()
+    a.add_address(AddressBook("Test", "Test"))
+    a.add_address(AddressBook("Test", "Test", email="123@gmail.com"))

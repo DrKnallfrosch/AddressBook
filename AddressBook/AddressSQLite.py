@@ -30,11 +30,16 @@ class AddressSQLite(AddressContainerInterface):
     def set_filepath(self, filepath: str):
         """
         Set the file path for the SQL-Database that contains the address data.
+        Ensures a .db file is used.
 
         Args:
             filepath (str): The path to the SQL-Database file.
         """
-        self.filepath = filepath
+        if filepath.lower().endswith(".db"):
+            self.filepath = filepath
+        else:
+            print("Unvalid File Format")
+
 
     def open(self):
         """
@@ -116,7 +121,7 @@ class AddressSQLite(AddressContainerInterface):
             self.cursor.execute(f"DELETE FROM {self.tablename} WHERE id = {id_}")
             self.conn.commit()
             return id_
-        except FileNotFoundError as e:
+        except sqlite3.Error as e:
             print(e)
             return None
 
@@ -260,7 +265,19 @@ class AddressSQLite(AddressContainerInterface):
 
 if __name__ == '__main__':
     a = AddressSQLite()
-    a.set_filepath(r"..\AddressBook\SQLite\AddressBook.db")
+    a.set_filepath(r"..\AddressBook\SQLite\AddressBook.txt")
     a.open()
-    a.add_address(AddressBook("Test", "Test"))
-    a.add_address(AddressBook("Test", "Test", email="123@gmail.com"))
+    print(a.filepath)
+    a.open()
+    a.save()
+    print(a.get_all())
+    print(a.search("Dominik"))
+    #  a.delete(2)
+    print(a.get(1))
+    print(a.get(2))
+    a.update(2, birthdate="2005-06-26")
+    b = AddressBook(firstname="Domink", lastname="Hase")
+    a.add_address(b)
+    print(a.get(3))
+    a.update(1, birthdate="2006-09-16")
+    print(a.get_todays_birthdays())

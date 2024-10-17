@@ -11,16 +11,26 @@ class AddressBook:
     """
     Represents an entry in the address book.
 
-    Attributes:
-        firstname (str): The first name of the person.
-        lastname (str): The last name of the person.
-        street (Optional[str]): The street where the person lives.
-        number (Optional[str]): The house number of the person.
-        postal_code (Optional[PositiveInt]): The postal code of the person's address.
-        place (Optional[str]): The city or town where the person lives.
-        birthdate (Optional[str]): The birthdate of the person in 'YYYY-MM-DD' format.
-        phone (Optional[str]): The person's phone number.
-        email (Optional[str]): The person's email address.
+    NOTE: Only numerical postal codes are permitted.
+
+    :ivar firstname: The first name of the person.
+    :type firstname: str
+    :ivar lastname: The last name of the person.
+    :type lastname: str
+    :ivar street: The street where the person lives.
+    :type street: Optional[str]
+    :ivar number: The house number of the person.
+    :type number: Optional(str)
+    :ivar postal_code: The postal code of the person's address.
+    :type postal_code: Optional(PositiveInt)
+    :ivar place: The city where the person lives.
+    :type place: Optional(str)
+    :ivar birthdate: The birthdate of the person.
+    :type birthdate: Optional(str)
+    :ivar phone: The phone number of the person.
+    :type phone: Optional(str)
+    :ivar email: The email address of the person.
+    :type email: Optional(str)
     """
 
     firstname: str
@@ -38,14 +48,10 @@ class AddressBook:
         """
         Validates and converts the birthdate string into a `datetime.date` object.
 
-        Args:
-            value (str): The birthdate string in 'YYYY-MM-DD' format.
-
-        Returns:
-            Optional[date]: The birthdate as a `datetime.date` object if valid, or None if the value is empty.
-
-        Raises:
-            ValueError: If the birthdate string is not in the correct format.
+        :param str value: The birthdate string in 'YYYY-MM-DD' format.
+        :return: The birthdate as a `datetime.date` object if valid, or None if the value is empty.
+        :rtype: Optional[date]
+        :raises ValueError: If the birthdate string is not in the correct format.
         """
         if value is None or value == '':
             return None
@@ -58,15 +64,12 @@ class AddressBook:
     def get_validate_email(cls, value: Optional[str]) -> Optional[str]:
         """
         Validates the email address using the `email_validator` library.
+        checks if the email format is valid and if the email is deliverable.
 
-        Args:
-            value (str): The email address to validate.
-
-        Returns:
-            Optional[str]: The validated email address, or None if the value is empty.
-
-        Raises:
-            ValueError: If the email format is invalid.
+        :param Optional[str] value: The email address to validate.
+        :return: The validated email address, or None if the value is empty.
+        :rtype: Optional[str]
+        :raises ValueError: If the email format is invalid.
         """
         if value is None or value == '':
             return None  # Return None if email is empty or missing
@@ -80,32 +83,10 @@ class AddressBook:
         """
         Returns a string representation of the address book entry.
 
-        Returns:
-            str: A formatted string containing the full details of the address book entry.
+        :return: A formatted string containing the full details of the address book entry.
+        :rtype: str
         """
         return (
             f"Name: {self.firstname} {self.lastname} {self.birthdate}\n"
             f"Address: {self.street} {self.number}, {self.postal_code} {self.place}\n"
-            f"Contact: {self.phone} {self.email}\n"
-        )
-
-
-if __name__ == '__main__':
-    a1 = AddressBook('Henri', 'Henrison', 'ABC-Street', '10', 11111, 'Berlin', '2001-12-01', '12345678',
-                     '123@gmail.com')
-    a2 = AddressBook('Henri', 'Henrison', 'ABC-Street', '12a', 11111, 'Berlin')
-
-    a3 = AddressBook('Henri', 'Henrison', 'ABC-Street', '10', 11111, 'Berlin', '2001-12-01', '12345678',
-                     'a@mail.com')
-    a4 = AddressBook("Niki", "Fresse")
-
-    print(a1)
-    print(a2)
-    print(a1 > a2)
-
-    l = [a1, a2, a3]
-    sorted_list = sorted(l)
-    for element in sorted_list:
-        print(element)
-
-    print(a4)
+            f"Contact: {self.phone} {self.email}\n")

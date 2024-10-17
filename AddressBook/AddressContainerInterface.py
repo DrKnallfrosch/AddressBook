@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from AddressBook import AddressBook
+from AddressBook.AddressBook import AddressBook
 from typing import Optional
 
 
@@ -15,8 +15,7 @@ class AddressContainerInterface(ABC):
         """
         Set the file path for the database.
 
-        Args:
-            filepath (str): The path to the file where the addresses will be stored.
+        :param str filepath: PATH to the file
         """
         pass
 
@@ -45,17 +44,15 @@ class AddressContainerInterface(ABC):
         pass
 
     @abstractmethod
-    def search(self, field: str, search_string: str) -> dict:
+    def search(self, field: str, search_string: str) -> dict[int, AddressBook]:
         """
         Search for a string in a specific field (e.g., name, phone, email).
         Return a dictionary containing all matching addresses.
 
-        Args:
-            field (str): The field to search within (e.g., "name", "email").
-            search_string (str): The search term to look for.
-
-        Returns:
-            dict: A dictionary where keys are IDs and values are matching addresses.
+        :param str field: The field to search within.
+        :param str search_string: The search term to look for.
+        :return: A dictionary where keys are IDs and values are matching addresses.
+        :rtype: dict[int, AddressBook]
         """
         pass
 
@@ -64,11 +61,9 @@ class AddressContainerInterface(ABC):
         """
         Delete an address by its ID.
 
-        Args:
-            id_ (int): The ID of the address to delete.
-
-        Returns:
-            int | None: The ID of the deleted address if successful, or None if the ID doesn't exist.
+        :param int id_: The ID of the address to delete.
+        :return: The ID of the deleted address if successful, or None if the ID doesn't exist.
+        :rtype: int or None:
         """
         pass
 
@@ -77,60 +72,52 @@ class AddressContainerInterface(ABC):
         """
         Update an existing address by its ID.
 
-        Args:
-            id_ (int): The ID of the address to update.
-            **kwargs: Key-value pairs of fields to update in the address.
-
-        Returns:
-            int: The ID of the updated address if successful.
-
-        Raises:
-            KeyError: If the address with the specified ID is not found.
+        :param int id_: The ID of the address to update.
+        :param kwargs: Key-value pairs of fields to update in the address.
+        :return: The ID of the updated address if successful.
+        :rtype: int
+        :raise KeyError: If the address with the specified ID is not found.
         """
         pass
 
     @abstractmethod
-    def add_address(self, address) -> int:
+    def add_address(self, address: AddressBook) -> int:
         """
         Add a new address to the address book.
 
-        Args:
-            address: The address object to add (can be a dictionary or AddressBook instance).
-
-        Returns:
-            int: The ID of the newly added address.
+        :param AddressBook address: The address object to add (can be a dictionary or AddressBook instance).
+        :return: The ID of the newly added address.
+        :rtype: int
         """
         pass
 
     @abstractmethod
-    def get_all(self) -> dict:
+    def get_all(self) -> dict[int, AddressBook]:
         """
         Retrieve all addresses stored in the address book.
 
-        Returns:
-            dict: A dictionary where keys are IDs and values are address objects.
+        :return: A dictionary where keys are IDs and values are address objects.
+        :rtype: dict[int, AddressBook]
         """
         pass
 
     @abstractmethod
-    def get(self, id_: int) -> AddressBook | None:
+    def get(self, id_: int) -> AddressBook or None:
         """
         Retrieve a specific address by its ID.
 
-        Args:
-            id_ (int): The ID of the address to retrieve.
-
-        Returns:
-            AddressBook | None: The address if found, or None if the ID does not exist.
+        :param int id_: The ID of the address to retrieve.
+        :return: The address if found, or None if the ID does not exist.
+        :rtype: AddressBook, None
         """
         pass
 
     @abstractmethod
-    def get_todays_birthdays(self) -> dict:
+    def get_todays_birthdays(self) -> dict[int, AddressBook]:
         """
         Retrieve addresses of persons who have their birthday today.
 
-        Returns:
-            dict: A dictionary where keys are IDs and values are addresses of people whose birthday is today.
+        :return: A dictionary where keys are IDs and values are addresses of people whose birthday is today.
+        :rtype: dict[int, AddressBook]
         """
         pass

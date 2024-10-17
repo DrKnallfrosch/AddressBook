@@ -1,5 +1,5 @@
-from AddressContainerInterface import AddressContainerInterface
-from AddressBook import AddressBook
+from AddressBook.AddressContainerInterface import AddressContainerInterface
+from AddressBook.AddressBook import AddressBook
 import sqlite3
 
 
@@ -11,16 +11,16 @@ class AddressSQLite(AddressContainerInterface):
     SQL-Dialect: SQLite.
 
     Functionalities include loading databases and getting, deleting, adding or updating entries.
+
+    :ivar filepath: The path to the SQLite database file. Defaults to None to make defining it here optional.
+    :ivar tablename: The name of the table where the address data will be stored. Defaults to "AddressBook".
     """
+
     def __init__(self, filepath: str = None, tablename="AddressBook"):
         """
         Initialize the AddressSQLite object with the database filepath and table name. Parameters are optional to allow
         a file path to be set here or the tablename to be modified.
         Also initializes the connection and cursor attributes to None.
-
-        Parameters:
-        - filepath (str): The path to the SQLite database file. Defaults to None to make defining it here optional.
-        - tablename (str): The name of the table where the address data will be stored. Defaults to "AddressBook".
         """
         self.filepath = filepath
         self.conn = None
@@ -32,20 +32,20 @@ class AddressSQLite(AddressContainerInterface):
         Set the file path for the SQL-Database that contains the address data.
         Ensures a .db file is used.
 
-        Args:
-            filepath (str): The path to the SQL-Database file.
+        :oaram str filepath: The path to the SQL-Database file.
         """
         if filepath.lower().endswith(".db"):
             self.filepath = filepath
         else:
             print("Unvalid File Format")
 
-
     def open(self):
         """
         Establish the connection to the SQL-Database file specified by the filepath attribute and
         creates a cursor object. Calls the setup_table method to create a table (if not already existing)
         with the name specified by the tablename attribute. Outputs the error in case any occur.
+
+        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         with open(self.filepath, "a"):
             try:
@@ -60,6 +60,8 @@ class AddressSQLite(AddressContainerInterface):
     def close(self):
         """
         Closes the cursor object and the connection to the SQL-Database. Outputs the error in case any occur.
+
+        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         try:
             if self.conn:
@@ -71,6 +73,8 @@ class AddressSQLite(AddressContainerInterface):
     def save(self):
         """
         Commits all changes done to the SQL-Database. Outputs the error in case any occur.
+
+        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         try:
             self.conn.commit()
@@ -84,12 +88,12 @@ class AddressSQLite(AddressContainerInterface):
         The Search is done case-insensitive and non-exact (utilizes the LIKE statement with wildcards).
 
         Args:
-            search_string (str): The string to search for across all fields or restricted to one field.
-            field (str, optional): The field to search within (e.g., "firstname", "lastname", "email").
-                                   Defaults to an empty string (""), resulting in a search across all fields.
 
-        Returns:
-            dict[int, AddressBook]: A dictionary containing matching address entries with IDs as keys.
+        :param str search_string: The string to search for across all fields or restricted to one field.
+        :param str, optonal field: The field to search within (e.g., "firstname", "lastname", "email").
+                                   Defaults to an empty string (""), resulting in a search across all fields.
+        :return: A dictionary containing matching address entries with IDs as keys.
+        :rtype: dict[int, AddressBook]
         """
         columns = ["firstname", "lastname", "street", "number",
                    "postal_code", "place", "birthdate", "phone", "email"]
@@ -111,11 +115,10 @@ class AddressSQLite(AddressContainerInterface):
         """
         Deletes an address by its ID.
 
-        Args:
-            id_ (int): The ID of the address to delete.
-
-        Returns:
-            int | None: The ID of the deleted address if found and removed, otherwise None.
+        :param int id_: The ID of the address to delete.
+        :return: The ID of the deleted address if found and removed, otherwise None.
+        :rtype: int, None
+        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         try:
             self.cursor.execute(f"DELETE FROM {self.tablename} WHERE id = {id_}")
@@ -129,20 +132,16 @@ class AddressSQLite(AddressContainerInterface):
         """
         Update fields of an address by its ID and keyword arguments. Raises KeyError if the ID is not found.
 
-        Args:
-            id_ (int): The ID of the address to update.
-            **kwargs: Field names and their updated values (e.g., firstname="John").
-
-        Returns:
-            int: The ID of the updated address.
-
-        Raises:
-            KeyError: If the address with the given ID is not found.
+        :param int id_: The ID of the address to update.
+        :param kwargs: Field names and their updated values (e.g., firstname="John").
+        :return: The ID of the updated address.
+        :rtype: int
+        :raise KeyError: If the address with the given ID is not found.
         """
         fields = ', '.join([f"{key} = ?" for key in kwargs])
         values = list(kwargs.values()) + [id_]
         try:
-            self.cursor.execute(f"UPDATE {self.tablename} SET {fields} WHERE id = {values}")
+            self.cursor.execute(f"UPDATE {self.tablename} SET {fields} WHERE id = ?", values)
             self.conn.commit()
             return id_
         except sqlite3.Error:
@@ -152,11 +151,9 @@ class AddressSQLite(AddressContainerInterface):
         """
         Add a new address to the address book, ensuring no duplicates are added.
 
-        Args:
-            address (AddressBook): The address to add.
-
-        Returns:
-            int: The ID of the newly added address, 0 if an error occurs or -1 if it already exists.
+        :param Addressbook address: The address to add.
+        :return: The ID of the newly added address, 0 if an error occurs or -1 if it already exists.
+        :rtype: int
         """
         if self.is_duplicate(address):
             print("This address book entry already exists.")
@@ -177,20 +174,19 @@ class AddressSQLite(AddressContainerInterface):
                 address.phone,
                 address.email
             )
-        )
+                                )
             self.conn.commit()
             return self.cursor.lastrowid
         except sqlite3.Error:
             print(f"Error adding address: {address}")
             return 0
 
-
     def get_all(self) -> dict[int, AddressBook]:
         """
         Return all address entries as a dictionary.
 
-        Returns:
-            dict[int, AddressBook]: A dictionary where keys are IDs and values are AddressBook objects.
+        :return: A dictionary where keys are IDs and values are AddressBook objects.
+        :rtype: dict[int, AddressBook]
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename}")
         return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
@@ -199,11 +195,9 @@ class AddressSQLite(AddressContainerInterface):
         """
         Retrieve an address by its ID.
 
-        Args:
-            id_ (int): The ID of the address to retrieve.
-
-        Returns:
-            AddressBook | None: The address if found, otherwise None.
+        :param int id_: The ID of the address to retrieve.
+        :return: The address if found, otherwise None.
+        :rtype: AddressBook, None
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE id = {id_}")
         result = self.cursor.fetchone()
@@ -211,15 +205,12 @@ class AddressSQLite(AddressContainerInterface):
             return AddressBook(*result[1:])
         return None
 
-
-
     def get_todays_birthdays(self) -> dict[int, AddressBook]:
         """
         Get all addresses of persons who have their birthday today.
 
-        Returns:
-            dict[int, AddressBook]: A dictionary where keys are IDs and values are AddressBook
-                                    objects with matching birthdays.
+        :return: A dictionary where keys are IDs and values are AddressBook objects with matching birthdays.
+        :rtype: dict[int, AddressBook]:
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename} "
                             f"WHERE strftime('%m-%d', birthdate) = strftime('%m-%d', 'now');")
@@ -250,11 +241,9 @@ class AddressSQLite(AddressContainerInterface):
         """
         Check if an address is a duplicate based on first name, last name, and email.
 
-        Args:
-            address (AddressBook): The address to check for duplicates.
-
-        Returns:
-            bool: True if a duplicate is found, otherwise False.
+        :param AddressBook address: The address to check for duplicates.
+        :return: True if a duplicate is found, otherwise False.
+        :rtype: bool
         """
         self.cursor.execute(f"SELECT id, email FROM {self.tablename} WHERE firstname = ? and lastname = ?;",
                             (address.firstname, address.lastname))
@@ -262,22 +251,3 @@ class AddressSQLite(AddressContainerInterface):
         if result and any(item[1] == address.email for item in result):
             return True
         return False
-
-if __name__ == '__main__':
-    a = AddressSQLite()
-    a.set_filepath(r"..\AddressBook\SQLite\AddressBook.txt")
-    a.open()
-    print(a.filepath)
-    a.open()
-    a.save()
-    print(a.get_all())
-    print(a.search("Dominik"))
-    #  a.delete(2)
-    print(a.get(1))
-    print(a.get(2))
-    a.update(2, birthdate="2005-06-26")
-    b = AddressBook(firstname="Domink", lastname="Hase")
-    a.add_address(b)
-    print(a.get(3))
-    a.update(1, birthdate="2006-09-16")
-    print(a.get_todays_birthdays())

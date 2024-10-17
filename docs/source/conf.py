@@ -8,10 +8,12 @@
 import os
 import sys
 
-# Add AddressBook module to the system path
 sys.path.insert(0, os.path.abspath('../..'))
 
-project = 'AddressBook'
+# Add Address module to the system path
+
+
+project = 'Address'
 copyright = '2024, Tim Schuette, Dominik Elias Hase'
 author = 'Tim Schuette, Dominik Elias Hase'
 release = '1.0'
@@ -23,10 +25,14 @@ extensions = [
     'sphinx.ext.autodoc',        # Automatically generate documentation from docstrings
     'sphinx.ext.napoleon',       # For Google/NumPy style docstrings
     'sphinx_autodoc_typehints',  # Add type hints to docs
+    'sphinx.ext.viewcode',       # Add links to source code
 ]
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = [
+    '_build',
+    'Thumbs.db',
+    '.DS_Store',]
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
@@ -37,3 +43,5 @@ html_theme = 'python_docs_theme'
 # The master toctree document.
 master_doc = 'index'
 html_static_path = ['_static']
+
+html_css_files = ["custom.css"]

@@ -21,10 +21,6 @@ class AddressSQLite(AddressContainerInterface):
         Initialize the AddressSQLite object with the database filepath and table name. Parameters are optional to allow
         a file path to be set here or the tablename to be modified.
         Also initializes the connection and cursor attributes to None.
-
-        Parameters:
-        - filepath (str): The path to the SQLite database file. Defaults to None to make defining it here optional.
-        - tablename (str): The name of the table where the address data will be stored. Defaults to "AddressBook".
         """
         self.filepath = filepath
         self.conn = None
@@ -36,7 +32,7 @@ class AddressSQLite(AddressContainerInterface):
         Set the file path for the SQL-Database that contains the address data.
         Ensures a .db file is used.
 
-        :oaram str filepath: The path to the SQL-Database file.
+        :param str filepath: The path to the SQL-Database file.
         """
         if filepath.lower().endswith(".db"):
             self.filepath = filepath
@@ -90,8 +86,6 @@ class AddressSQLite(AddressContainerInterface):
         Search for a given string across all fields of the database and returns matching entries.
         Additionally, takes the field string to restrict the search to a specific field.
         The Search is done case-insensitive and non-exact (utilizes the LIKE statement with wildcards).
-
-        Args:
 
         :param str search_string: The string to search for across all fields or restricted to one field.
         :param str, optonal field: The field to search within (e.g., "firstname", "lastname", "email").
@@ -178,13 +172,12 @@ class AddressSQLite(AddressContainerInterface):
                 address.phone,
                 address.email
             )
-        )
+                                )
             self.conn.commit()
             return self.cursor.lastrowid
         except sqlite3.Error:
             print(f"Error adding address: {address}")
             return 0
-
 
     def get_all(self) -> dict[int, AddressBook]:
         """
@@ -209,8 +202,6 @@ class AddressSQLite(AddressContainerInterface):
         if result:
             return AddressBook(*result[1:])
         return None
-
-
 
     def get_todays_birthdays(self) -> dict[int, AddressBook]:
         """

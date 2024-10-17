@@ -54,7 +54,7 @@ class AddressSQLite(AddressContainerInterface):
                 self.setup_table()
             except sqlite3.Error as e:
                 print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
-            except Exception as e:
+            except OSError as e:
                 print(e)
 
     def close(self):
@@ -142,11 +142,12 @@ class AddressSQLite(AddressContainerInterface):
         fields = ', '.join([f"{key} = ?" for key in kwargs])
         values = list(kwargs.values()) + [id_]
         try:
-            self.cursor.execute(f"UPDATE {self.tablename} SET {fields} WHERE id = {values}")
+            self.cursor.execute(f"UPDATE {self.tablename} SET {fields} WHERE id = ?", values)
             self.conn.commit()
+
             return id_
-        except sqlite3.Error:
-            raise KeyError
+        except sqlite3.Error as e:
+            raise KeyError(f"Error updating record with ID {id_}: {e}")
 
     def add_address(self, address: AddressBook) -> int:
         """
@@ -262,22 +263,3 @@ class AddressSQLite(AddressContainerInterface):
         if result and any(item[1] == address.email for item in result):
             return True
         return False
-
-if __name__ == '__main__':
-    a = AddressSQLite()
-    a.set_filepath(r"..\AddressBook\SQLite\AddressBook.txt")
-    a.open()
-    print(a.filepath)
-    a.open()
-    a.save()
-    print(a.get_all())
-    print(a.search("Dominik"))
-    #  a.delete(2)
-    print(a.get(1))
-    print(a.get(2))
-    a.update(2, birthdate="2005-06-26")
-    b = AddressBook(firstname="Domink", lastname="Hase")
-    a.add_address(b)
-    print(a.get(3))
-    a.update(1, birthdate="2006-09-16")
-    print(a.get_todays_birthdays())

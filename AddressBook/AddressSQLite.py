@@ -21,6 +21,10 @@ class AddressSQLite(AddressContainerInterface):
         Initialize the AddressSQLite object with the database filepath and table name. Parameters are optional to allow
         a file path to be set here or the tablename to be modified.
         Also initializes the connection and cursor attributes to None.
+
+        Parameters:
+        - filepath (str): The path to the SQLite database file. Defaults to None to make defining it here optional.
+        - tablename (str): The name of the table where the address data will be stored. Defaults to "AddressBook".
         """
         self.filepath = filepath
         self.conn = None
@@ -54,7 +58,7 @@ class AddressSQLite(AddressContainerInterface):
                 self.setup_table()
             except sqlite3.Error as e:
                 print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
-            except Exception as e:
+            except OSError as e:
                 print(e)
 
     def close(self):
@@ -144,8 +148,8 @@ class AddressSQLite(AddressContainerInterface):
             self.cursor.execute(f"UPDATE {self.tablename} SET {fields} WHERE id = ?", values)
             self.conn.commit()
             return id_
-        except sqlite3.Error:
-            raise KeyError
+        except sqlite3.Error as e:
+            raise KeyError(f"Error updating record with ID {id_}: {e}")
 
     def add_address(self, address: AddressBook) -> int:
         """
@@ -174,12 +178,13 @@ class AddressSQLite(AddressContainerInterface):
                 address.phone,
                 address.email
             )
-                                )
+        )
             self.conn.commit()
             return self.cursor.lastrowid
         except sqlite3.Error:
             print(f"Error adding address: {address}")
             return 0
+
 
     def get_all(self) -> dict[int, AddressBook]:
         """
@@ -204,6 +209,8 @@ class AddressSQLite(AddressContainerInterface):
         if result:
             return AddressBook(*result[1:])
         return None
+
+
 
     def get_todays_birthdays(self) -> dict[int, AddressBook]:
         """

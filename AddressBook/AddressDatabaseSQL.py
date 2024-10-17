@@ -1,9 +1,10 @@
-from AddressBook.AddressContainerInterface import AddressContainerInterface
-from AddressBook.AddressBook import AddressBook
+from AddressContainerInterface import AddressContainerInterface
+from AddressBook import AddressBook
+from typing import Optional
 import sqlite3
 
 
-class AddressSQLite(AddressContainerInterface):
+class AddressDatabaseSQL(AddressContainerInterface):
     """
     Interface for storing and managing Object belonging to the AddressBook Dataclass in SQL-Databases. Every entry gets
     an id assigned to them as their primary key. Firstname and Lastname are required.
@@ -11,21 +12,17 @@ class AddressSQLite(AddressContainerInterface):
     SQL-Dialect: SQLite.
 
     Functionalities include loading databases and getting, deleting, adding or updating entries.
-
-    :ivar filepath: The path to the SQLite database file. Defaults to None to make defining it here optional.
-    :ivar tablename: The name of the table where the address data will be stored. Defaults to "AddressBook".
     """
 
-    def __init__(self, filepath: str = None, tablename="AddressBook"):
+    def __init__(self):
         """
-        Initialize the AddressSQLite object with the database filepath and table name. Parameters are optional to allow
-        a file path to be set here or the tablename to be modified.
-        Also initializes the connection and cursor attributes to None.
+        Initialize the AddressDatabaseSQL object with empty filepath connection and cursor object.
+        The table name used in the database file is called AddressBook.
         """
-        self.filepath = filepath
+        self.filepath = None
         self.conn = None
         self.cursor = None
-        self.tablename = tablename
+        self.tablename = "AddressBook"
 
     def set_filepath(self, filepath: str):
         """
@@ -37,7 +34,7 @@ class AddressSQLite(AddressContainerInterface):
         if filepath.lower().endswith(".db"):
             self.filepath = filepath
         else:
-            print("Unvalid File Format")
+            raise ValueError("Invalid File Format. Required: .db Database file")
 
     def open(self):
         """
@@ -47,21 +44,21 @@ class AddressSQLite(AddressContainerInterface):
 
         :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
-        with open(self.filepath, "a"):
-            try:
-                self.conn = sqlite3.connect(self.filepath)
-                self.cursor = self.conn.cursor()
-                self.setup_table()
-            except sqlite3.Error as e:
-                print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
-            except OSError as e:
-                print(e)
+        if self.filepath is None:
+            raise ValueError("Invalid File Format. Required: .db Database file")
+
+        try:
+
+            self.conn = sqlite3.connect(self.filepath)
+            self.cursor = self.conn.cursor()
+            self.setup_table()
+
+        except sqlite3.Error as e:
+            print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
 
     def close(self):
         """
         Closes the cursor object and the connection to the SQL-Database. Outputs the error in case any occur.
-
-        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         try:
             if self.conn:
@@ -73,8 +70,6 @@ class AddressSQLite(AddressContainerInterface):
     def save(self):
         """
         Commits all changes done to the SQL-Database. Outputs the error in case any occur.
-
-        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         try:
             self.conn.commit()
@@ -88,10 +83,11 @@ class AddressSQLite(AddressContainerInterface):
         The Search is done case-insensitive and non-exact (utilizes the LIKE statement with wildcards).
 
         :param str search_string: The string to search for across all fields or restricted to one field.
-        :param str, optonal field: The field to search within (e.g., "firstname", "lastname", "email").
+        :param str, optional field: The field to search within (e.g., "firstname", "lastname", "email").
                                    Defaults to an empty string (""), resulting in a search across all fields.
         :return: A dictionary containing matching address entries with IDs as keys.
         :rtype: dict[int, AddressBook]
+        :raises ValueError: If the specified field is invalid (i.e., not in the allowed columns)
         """
         columns = ["firstname", "lastname", "street", "number",
                    "postal_code", "place", "birthdate", "phone", "email"]
@@ -109,14 +105,13 @@ class AddressSQLite(AddressContainerInterface):
             self.cursor.execute(query, search_params)
         return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
 
-    def delete(self, id_: int) -> int | None:
+    def delete(self, id_: int) -> Optional[int]:
         """
         Deletes an address by its ID.
 
         :param int id_: The ID of the address to delete.
         :return: The ID of the deleted address if found and removed, otherwise None.
         :rtype: int, None
-        :raise sqlite3.Error: Trigger when an error comes from sqlite3
         """
         try:
             self.cursor.execute(f"DELETE FROM {self.tablename} WHERE id = {id_}")
@@ -149,7 +144,7 @@ class AddressSQLite(AddressContainerInterface):
         """
         Add a new address to the address book, ensuring no duplicates are added.
 
-        :param Addressbook address: The address to add.
+        :param AddressBook address: The address to add.
         :return: The ID of the newly added address, 0 if an error occurs or -1 if it already exists.
         :rtype: int
         """
@@ -189,7 +184,7 @@ class AddressSQLite(AddressContainerInterface):
         self.cursor.execute(f"SELECT * FROM {self.tablename}")
         return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
 
-    def get(self, id_: int) -> AddressBook | None:
+    def get(self, id_: int) -> Optional[AddressBook]:
         """
         Retrieve an address by its ID.
 

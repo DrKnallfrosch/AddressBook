@@ -9,12 +9,12 @@ Welcome to AddressBook's documentation!
 
    modules
 
-.. automodule:: AddressBook
+.. automodule:: Address
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: AddressSQLite
+.. automodule:: AddressDatabaseSQL
    :members:
    :undoc-members:
    :show-inheritance:

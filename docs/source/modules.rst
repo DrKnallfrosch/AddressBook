@@ -2,9 +2,9 @@ Modules
 =======
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
-   AddressBook
-   AddressCSVInterface
+   Address
+   AddressDatabaseCSV
    AddressContainerInterface
    AddressSQLite

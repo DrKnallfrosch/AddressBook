@@ -7,7 +7,7 @@ from pydantic.dataclasses import dataclass
 
 
 @dataclass(order=True)
-class AddressBook:
+class Address:
     """
     Represents an entry in the address book.
 

@@ -1,12 +1,11 @@
-import logging
-from AddressBook.AddressBook import AddressBook
+from AddressBook.Address import Address
 from AddressBook.AddressDatabaseCSV import AddressDatabaseCSV
-
-logging.basicConfig(level=logging.INFO)
+from AddressBook.AddressDatabaseSQL import AddressDatabaseSQL
 
 
 def display_menu():
     print("\n--- Address Book Menu ---")
+    print("0. Set Filepath")
     print("1. Add Address")
     print("2. Search Address")
     print("3. Update Address")
@@ -14,6 +13,12 @@ def display_menu():
     print("5. Show All Addresses")
     print("6. Show Today's Birthdays")
     print("7. Exit")
+
+
+def set_filepath(addressdb):
+    filepath = input("Enter the new filepath: ")
+    addressdb.set_filepath(filepath)
+    print(f"Filepath set to: {filepath}")
 
 
 def add_address(address_db):
@@ -27,7 +32,7 @@ def add_address(address_db):
     phone = input("Enter Phone Number: ")
     email = input("Enter Email: ")
 
-    new_address = AddressBook(
+    new_address = Address(
         firstname=firstname,
         lastname=lastname,
         street=street,
@@ -99,16 +104,27 @@ def show_todays_birthdays(address_db):
         print("No birthdays today.")
 
 
+def choose_database():
+    while True:
+        db_choice = input("Choose database model (CSV/SQL): ").strip().lower()
+        if db_choice == 'csv':
+            return AddressDatabaseCSV()
+        elif db_choice == 'sql':
+            return AddressDatabaseSQL()
+        else:
+            print("Invalid choice. Please choose 'CSV' or 'SQL'.")
+
+
 if __name__ == '__main__':
-    address_db = AddressDatabaseCSV()
-    address_db.set_filepath("./CSV/address.csv")
-    address_db.open()
+    address_db = choose_database()  # Ask user to choose the database model
 
     while True:
         display_menu()
         choice = input("Choose an option: ")
 
-        if choice == '1':
+        if choice == '0':
+            set_filepath(address_db)
+        elif choice == '1':
             add_address(address_db)
             address_db.save()
         elif choice == '2':

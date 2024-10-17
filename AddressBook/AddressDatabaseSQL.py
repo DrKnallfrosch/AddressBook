@@ -1,12 +1,12 @@
-from AddressContainerInterface import AddressContainerInterface
-from AddressBook import AddressBook
+from AddressBook.AddressContainerInterface import AddressContainerInterface
+from AddressBook.Address import Address
 from typing import Optional
 import sqlite3
 
 
 class AddressDatabaseSQL(AddressContainerInterface):
     """
-    Interface for storing and managing Object belonging to the AddressBook Dataclass in SQL-Databases. Every entry gets
+    Interface for storing and managing Object belonging to the Address Dataclass in SQL-Databases. Every entry gets
     an id assigned to them as their primary key. Firstname and Lastname are required.
 
     SQL-Dialect: SQLite.
@@ -17,12 +17,12 @@ class AddressDatabaseSQL(AddressContainerInterface):
     def __init__(self):
         """
         Initialize the AddressDatabaseSQL object with empty filepath connection and cursor object.
-        The table name used in the database file is called AddressBook.
+        The table name used in the database file is called Address.
         """
         self.filepath = None
         self.conn = None
         self.cursor = None
-        self.tablename = "AddressBook"
+        self.tablename = "Address"
 
     def set_filepath(self, filepath: str):
         """
@@ -76,7 +76,7 @@ class AddressDatabaseSQL(AddressContainerInterface):
         except sqlite3.Error as e:
             print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
 
-    def search(self, search_string: str, field: str = "") -> dict[int, AddressBook]:
+    def search(self, search_string: str, field: str = "") -> dict[int, Address]:
         """
         Search for a given string across all fields of the database and returns matching entries.
         Additionally, takes the field string to restrict the search to a specific field.
@@ -86,7 +86,7 @@ class AddressDatabaseSQL(AddressContainerInterface):
         :param str, optional field: The field to search within (e.g., "firstname", "lastname", "email").
                                    Defaults to an empty string (""), resulting in a search across all fields.
         :return: A dictionary containing matching address entries with IDs as keys.
-        :rtype: dict[int, AddressBook]
+        :rtype: dict[int, Address]
         :raises ValueError: If the specified field is invalid (i.e., not in the allowed columns)
         """
         columns = ["firstname", "lastname", "street", "number",
@@ -103,7 +103,7 @@ class AddressDatabaseSQL(AddressContainerInterface):
             ) + ";"
             search_params = [f"%{search_string}%"] * len(columns)
             self.cursor.execute(query, search_params)
-        return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
+        return {elements[0]: Address(*elements[1:]) for elements in self.cursor.fetchall()}
 
     def delete(self, id_: int) -> Optional[int]:
         """
@@ -140,11 +140,11 @@ class AddressDatabaseSQL(AddressContainerInterface):
         except sqlite3.Error as e:
             raise KeyError(f"Error updating record with ID {id_}: {e}")
 
-    def add_address(self, address: AddressBook) -> int:
+    def add_address(self, address: Address) -> int:
         """
         Add a new address to the address book, ensuring no duplicates are added.
 
-        :param AddressBook address: The address to add.
+        :param Address address: The address to add.
         :return: The ID of the newly added address, 0 if an error occurs or -1 if it already exists.
         :rtype: int
         """
@@ -174,44 +174,44 @@ class AddressDatabaseSQL(AddressContainerInterface):
             print(f"Error adding address: {address}")
             return 0
 
-    def get_all(self) -> dict[int, AddressBook]:
+    def get_all(self) -> dict[int, Address]:
         """
         Return all address entries as a dictionary.
 
         :return: A dictionary where keys are IDs and values are AddressBook objects.
-        :rtype: dict[int, AddressBook]
+        :rtype: dict[int, Address]
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename}")
-        return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
+        return {elements[0]: Address(*elements[1:]) for elements in self.cursor.fetchall()}
 
-    def get(self, id_: int) -> Optional[AddressBook]:
+    def get(self, id_: int) -> Optional[Address]:
         """
         Retrieve an address by its ID.
 
         :param int id_: The ID of the address to retrieve.
         :return: The address if found, otherwise None.
-        :rtype: AddressBook, None
+        :rtype: Address, None
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE id = {id_}")
         result = self.cursor.fetchone()
         if result:
-            return AddressBook(*result[1:])
+            return Address(*result[1:])
         return None
 
-    def get_todays_birthdays(self) -> dict[int, AddressBook]:
+    def get_todays_birthdays(self) -> dict[int, Address]:
         """
         Get all addresses of persons who have their birthday today.
 
-        :return: A dictionary where keys are IDs and values are AddressBook objects with matching birthdays.
-        :rtype: dict[int, AddressBook]:
+        :return: A dictionary where keys are IDs and values are Address objects with matching birthdays.
+        :rtype: dict[int, Address]:
         """
         self.cursor.execute(f"SELECT * FROM {self.tablename} "
                             f"WHERE strftime('%m-%d', birthdate) = strftime('%m-%d', 'now');")
-        return {elements[0]: AddressBook(*elements[1:]) for elements in self.cursor.fetchall()}
+        return {elements[0]: Address(*elements[1:]) for elements in self.cursor.fetchall()}
 
     def setup_table(self):
         """
-        Creates a table in the currently specified filepath with all fields given in the AddressBook dataclass and an
+        Creates a table in the currently specified filepath with all fields given in the Address dataclass and an
         automatically increasing id as the primary key. Doesn't create in case there already is one with the name in the
         tablename attribute.
         """
@@ -230,11 +230,11 @@ class AddressDatabaseSQL(AddressContainerInterface):
         ''')
         self.conn.commit()
 
-    def is_duplicate(self, address: AddressBook) -> bool:
+    def is_duplicate(self, address: Address) -> bool:
         """
         Check if an address is a duplicate based on first name, last name, and email.
 
-        :param AddressBook address: The address to check for duplicates.
+        :param Address address: The address to check for duplicates.
         :return: True if a duplicate is found, otherwise False.
         :rtype: bool
         """

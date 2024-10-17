@@ -1,5 +1,5 @@
 import csv
-from AddressBook.AddressBook import AddressBook
+from AddressBook.Address import Address
 from AddressBook.AddressContainerInterface import AddressContainerInterface
 from typing import Optional, Dict
 from datetime import date
@@ -21,7 +21,7 @@ class AddressDatabaseCSV(AddressContainerInterface):
         Initializes the AddressDatabaseCSV with an empty address dictionary and no CSV file path.
         """
         self.filepath: str or None = None
-        self.addresses: Dict[int, AddressBook] = {}
+        self.addresses: Dict[int, Address] = {}
 
     def set_filepath(self, filepath: str):
         """
@@ -46,7 +46,7 @@ class AddressDatabaseCSV(AddressContainerInterface):
                     try:
                         # Ensure no leading/trailing spaces in the emails
                         row['email'] = row['email'].strip() if row['email'] else ''
-                        address = AddressBook(
+                        address = Address(
                             firstname=row['firstname'],
                             lastname=row['lastname'],
                             street=row.get('street'),
@@ -93,14 +93,14 @@ class AddressDatabaseCSV(AddressContainerInterface):
         """
         self.addresses.clear()
 
-    def search(self, field: str, search_string: str) -> Dict[int, AddressBook]:
+    def search(self, field: str, search_string: str) -> Dict[int, Address]:
         """
         Searches for a string in the specified field of the address entries.
 
         :param str field: The field to search within (e.g., "firstname", "lastname", "email").
         :param str search_string: The string to search for in the field.
         :return: A dictionary of matching address entries.
-        :rtype: Dict[int, AddressBook]
+        :rtype: Dict[int, Address]
 
         :raises ValueError: If the specified field does not exist in AddressBook.
         """
@@ -139,12 +139,12 @@ class AddressDatabaseCSV(AddressContainerInterface):
         else:
             raise KeyError(f"No address found with ID {id_}")
 
-    def add_address(self, address: AddressBook) -> int:
+    def add_address(self, address: Address) -> int:
         """
         Adds a new address entry to the address book.
 
         :param address: The AddressBook instance to add.
-        :type address: AddressBook
+        :type address: Address
         :return: The new ID of the added address entry, or -1 if the entry is a duplicate.
         :rtype: int
         """
@@ -154,32 +154,32 @@ class AddressDatabaseCSV(AddressContainerInterface):
         self.addresses[new_id] = address
         return new_id
 
-    def get_all(self) -> Dict[int, AddressBook]:
+    def get_all(self) -> Dict[int, Address]:
         """
         Returns all address entries as a dictionary.
 
         :return: A dictionary of all address entries, keyed by ID.
-        :rtype: Dict[int, AddressBook]
+        :rtype: Dict[int, Address]
         """
         return self.addresses
 
-    def get(self, id_: int) -> Optional[AddressBook]:
+    def get(self, id_: int) -> Optional[Address]:
         """
         Retrieves the address entry with the specified ID.
 
         :param id_: The ID of the address entry to retrieve.
         :type id_: int
-        :return: The AddressBook object, or None if the ID was not found.
-        :rtype: AddressBook, optional
+        :return: The Address object, or None if the ID was not found.
+        :rtype: Address, optional
         """
         return self.addresses.get(id_)
 
-    def get_todays_birthdays(self) -> Dict[int, AddressBook]:
+    def get_todays_birthdays(self) -> Dict[int, Address]:
         """
         Returns all address entries where today is the person's birthday.
 
         :return: A dictionary of address entries with today's birthday, keyed by their IDs.
-        :rtype: Dict[int, AddressBook]
+        :rtype: Dict[int, Address]
         """
         result = {}
         today = date.today().strftime("%m-%d")
@@ -188,11 +188,11 @@ class AddressDatabaseCSV(AddressContainerInterface):
                 result[id_] = address
         return result
 
-    def is_duplicate(self, address: AddressBook) -> bool:
+    def is_duplicate(self, address: Address) -> bool:
         """
         Checks if an address entry is a duplicate by comparing its firstname, lastname, and email with existing entries.
 
-        :param address: The AddressBook instance to check for duplicates.
+        :param address: The Address instance to check for duplicates.
         :return: True if the address entry is a duplicate, otherwise False.
         :rtype: bool
         """

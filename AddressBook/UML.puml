@@ -1,0 +1,50 @@
+@startuml
+interface AddressContainerInterface {
+    +add_address(address: Address) : int
+    +get_all() : dict[int, Address]
+    +get(id_: int) : Address or None
+    +get_todays_birthdays() : dict[int, Address]
+}
+
+class Address {
+    -id: int
+    -firstname: str
+    -lastname: str
+    -street: str
+    -number: int
+    -postal_code: str
+    -place: str
+    -birthdate: str
+    -phone: str
+    -email: str
+}
+
+class AddressDatabaseCSV {
+    -filepath: str
+    -addresses: dict[int, Address]
+    +load()
+    +save()
+    +add_address(address: Address): int
+    +get_all(): dict[int, Address]
+    +get(id_: int): Address or None
+    +get_todays_birthdays(): dict[int, Address]
+}
+
+class AddressDatabaseSQL {
+    -conn: Connection
+    -cursor: Cursor
+    -tablename: str
+    +setup_table()
+    +add_address(address: Address): int
+    +get_all(): dict[int, Address]
+    +get(id_: int): Address or None
+    +get_todays_birthdays(): dict[int, Address]
+    +is_duplicate(address: Address): bool
+}
+
+AddressContainerInterface <|.. AddressDatabaseCSV
+AddressContainerInterface <|.. AddressDatabaseSQL
+AddressDatabaseCSV --> Address
+AddressDatabaseSQL --> Address
+
+@enduml

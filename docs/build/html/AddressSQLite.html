@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>AddressSQLite &#8212; Address 1.0 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css?v=41b4f12d" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="_static/pygments_dark.css?v=b20cc3f5" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=1448364d" />
+    
+    <script src="_static/documentation_options.js?v=f2a433a1"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AddressContainerInterface" href="AddressContainerInterface.html" /><link rel="stylesheet" href="_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="_static/py.svg" />
+            <script type="text/javascript" src="_static/copybutton.js"></script>
+            <script type="text/javascript" src="_static/menu.js"></script>
+            <script type="text/javascript" src="_static/search-focus.js"></script>
+            <script type="text/javascript" src="_static/themetoggle.js"></script> 
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="Menu" />
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="_static/py.svg" alt="Python logo"/>
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="Quick search" aria-label="Quick search" type="search" name="q" />
+                <input type="submit" value="Go"/>
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    Theme
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>Auto</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">AddressSQLite</a><ul>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL</span></code></a><ul>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.add_address"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.add_address()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.close"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.close()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.delete"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.delete()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.get()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_all"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.get_all()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_todays_birthdays"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.get_todays_birthdays()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.is_duplicate"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.is_duplicate()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.open"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.open()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.save"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.save()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.search"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.search()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.set_filepath"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.set_filepath()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.setup_table"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.setup_table()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.update"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="AddressContainerInterface.html"
+                          title="previous chapter">AddressContainerInterface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/AddressSQLite.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </nav>
+    </div>
+</div>
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="AddressContainerInterface.html" title="AddressContainerInterface"
+             accesskey="P">previous</a> |</li>
+          <li><img src="_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"/></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+              <a href="index.html">Address 1.0 documentation</a> &#187;
+              
+          </li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AddressSQLite</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="search.html" method="get">
+          <input placeholder="Quick search" aria-label="Quick search" type="search" name="q" id="search-box" />
+          <input type="submit" value="Go" />
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    Theme
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>Auto</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-AddressBook.AddressDatabaseSQL">
+<span id="addresssqlite"></span><h1>AddressSQLite<a class="headerlink" href="#module-AddressBook.AddressDatabaseSQL" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">AddressBook.AddressDatabaseSQL.</span></span><span class="sig-name descname"><span class="pre">AddressDatabaseSQL</span></span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL" title="Link to this definition">¶</a></dt>
+<dd><p>Interface for storing and managing Object belonging to the Address Dataclass in SQL-Databases. Every entry gets
+an id assigned to them as their primary key. Firstname and Lastname are required.</p>
+<p>SQL-Dialect: SQLite.</p>
+<p>Functionalities include loading databases and getting, deleting, adding or updating entries.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.add_address">
+<span class="sig-name descname"><span class="pre">add_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.add_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.add_address" title="Link to this definition">¶</a></dt>
+<dd><p>Add a new address to the address book, ensuring no duplicates are added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> (<a class="reference internal" href="Address.html#AddressBook.Address.Address" title="AddressBook.Address.Address"><em>Address</em></a>) – The address to add.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the newly added address, 0 if an error occurs or -1 if it already exists.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.close" title="Link to this definition">¶</a></dt>
+<dd><p>Closes the cursor object and the connection to the SQL-Database. Outputs the error in case any occur.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.delete" title="Link to this definition">¶</a></dt>
+<dd><p>Deletes an address by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – The ID of the address to delete.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the deleted address if found and removed, otherwise None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve an address by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – The ID of the address to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The address if found, otherwise None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="Address.html#AddressBook.Address.Address" title="AddressBook.Address.Address">Address</a>, None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_all">
+<span class="sig-name descname"><span class="pre">get_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.get_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_all" title="Link to this definition">¶</a></dt>
+<dd><p>Return all address entries as a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary where keys are IDs and values are AddressBook objects.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict[int, <a class="reference internal" href="Address.html#AddressBook.Address.Address" title="AddressBook.Address.Address">Address</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_todays_birthdays">
+<span class="sig-name descname"><span class="pre">get_todays_birthdays</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.get_todays_birthdays"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_todays_birthdays" title="Link to this definition">¶</a></dt>
+<dd><p>Get all addresses of persons who have their birthday today.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary where keys are IDs and values are Address objects with matching birthdays.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict[int, <a class="reference internal" href="Address.html#AddressBook.Address.Address" title="AddressBook.Address.Address">Address</a>]:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.is_duplicate">
+<span class="sig-name descname"><span class="pre">is_duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.is_duplicate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.is_duplicate" title="Link to this definition">¶</a></dt>
+<dd><p>Check if an address is a duplicate based on first name, last name, and email.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> (<a class="reference internal" href="Address.html#AddressBook.Address.Address" title="AddressBook.Address.Address"><em>Address</em></a>) – The address to check for duplicates.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if a duplicate is found, otherwise False.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.open" title="Link to this definition">¶</a></dt>
+<dd><p>Establish the connection to the SQL-Database file specified by the filepath attribute and
+creates a cursor object. Calls the setup_table method to create a table (if not already existing)
+with the name specified by the tablename attribute. Outputs the error in case any occur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sqlite3.Error</strong> – Trigger when an error comes from sqlite3</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.save" title="Link to this definition">¶</a></dt>
+<dd><p>Commits all changes done to the SQL-Database. Outputs the error in case any occur.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.search">
+<span class="sig-name descname"><span class="pre">search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.search" title="Link to this definition">¶</a></dt>
+<dd><p>Search for a given string across all fields of the database and returns matching entries.
+Additionally, takes the field string to restrict the search to a specific field.
+The Search is done case-insensitive and non-exact (utilizes the LIKE statement with wildcards).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>search_string</strong> (<em>str</em>) – The string to search for across all fields or restricted to one field.</p></li>
+<li><p><strong>field</strong> (<em>str</em><em>, </em><em>optional</em>) – The field to search within (e.g., “firstname”, “lastname”, “email”).
+Defaults to an empty string (“”), resulting in a search across all fields.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing matching address entries with IDs as keys.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[int, <a class="reference internal" href="Address.html#AddressBook.Address.Address" title="AddressBook.Address.Address">Address</a>]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the specified field is invalid (i.e., not in the allowed columns)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.set_filepath">
+<span class="sig-name descname"><span class="pre">set_filepath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.set_filepath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.set_filepath" title="Link to this definition">¶</a></dt>
+<dd><p>Set the file path for the SQL-Database that contains the address data.
+Ensures a .db file is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – The path to the SQL-Database file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.setup_table">
+<span class="sig-name descname"><span class="pre">setup_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.setup_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.setup_table" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a table in the currently specified filepath with all fields given in the Address dataclass and an
+automatically increasing id as the primary key. Doesn’t create in case there already is one with the name in the
+tablename attribute.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/AddressDatabaseSQL.html#AddressDatabaseSQL.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.update" title="Link to this definition">¶</a></dt>
+<dd><p>Update fields of an address by its ID and keyword arguments. Raises KeyError if the ID is not found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – The ID of the address to update.</p></li>
+<li><p><strong>kwargs</strong> – Field names and their updated values (e.g., firstname=”John”).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the updated address.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>KeyError</strong> – If the address with the given ID is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">AddressSQLite</a><ul>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL</span></code></a><ul>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.add_address"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.add_address()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.close"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.close()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.delete"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.delete()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.get()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_all"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.get_all()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.get_todays_birthdays"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.get_todays_birthdays()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.is_duplicate"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.is_duplicate()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.open"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.open()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.save"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.save()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.search"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.search()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.set_filepath"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.set_filepath()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.setup_table"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.setup_table()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.AddressDatabaseSQL.AddressDatabaseSQL.update"><code class="docutils literal notranslate"><span class="pre">AddressDatabaseSQL.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="AddressContainerInterface.html"
+                          title="previous chapter">AddressContainerInterface</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/AddressSQLite.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="AddressContainerInterface.html" title="AddressContainerInterface"
+             >previous</a> |</li>
+          <li><img src="_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"/></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+              <a href="index.html">Address 1.0 documentation</a> &#187;
+              
+          </li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >Modules</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">AddressSQLite</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="search.html" method="get">
+          <input placeholder="Quick search" aria-label="Quick search" type="search" name="q" id="search-box" />
+          <input type="submit" value="Go" />
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    Theme
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>Auto</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; 
+    Copyright
+     2024, Tim Schuette, Dominik Elias Hase.
+    <br />
+    This page is licensed under the Python Software Foundation License Version 2.
+    <br />
+    Examples, recipes, and other code in the documentation are additionally licensed under the Zero Clause BSD License.
+    <br />
+    
+    
+    <br />
+
+    The Python Software Foundation is a non-profit corporation.
+<a href="https://www.python.org/psf/donations/">Please donate.</a>
+<br />
+    <br />
+    
+    <br />
+
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    </div>
+
+  </body>
+</html>

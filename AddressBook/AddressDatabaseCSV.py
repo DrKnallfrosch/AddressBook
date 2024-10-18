@@ -4,7 +4,7 @@ from AddressBook.AddressContainerInterface import AddressContainerInterface
 from typing import Optional, Dict
 from datetime import date
 from pydantic import ValidationError
-
+from os import path
 
 class AddressDatabaseCSV(AddressContainerInterface):
     """
@@ -69,6 +69,9 @@ class AddressDatabaseCSV(AddressContainerInterface):
         """
         Saves the current address entries back into the CSV file, overwriting the previous contents.
         """
+        if not path.exists(self.filepath):
+            print(f"File not found. Creating new CSV-File: {self.filepath}")
+
         with open(self.filepath, mode='w', newline='', encoding='utf-8') as file:
             fieldnames = ['id', 'firstname', 'lastname', 'street', 'number', 'postal_code', 'place', 'birthdate',
                           'phone', 'email']

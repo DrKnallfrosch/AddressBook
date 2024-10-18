@@ -8,7 +8,7 @@ class TestAddressSQLite(unittest.TestCase):
 
     def setUp(self):
         self.db = AddressDatabaseSQL()
-        self.db.set_filepath('.db')
+        self.db.set_filepath('test.db')
         self.db.open()
 
     def tearDown(self):

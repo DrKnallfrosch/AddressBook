@@ -61,7 +61,7 @@ class Address:
             raise ValueError(f"Invalid birthdate format: {value}")
 
     @field_validator('email')
-    def get_validate_email(cls, value: Optional[str]) -> Optional[str]:
+    def validate_email(cls, value: Optional[str]) -> Optional[str]:
         """
         Validates the email address using the `email_validator` library.
         checks if the email format is valid and if the email is deliverable.

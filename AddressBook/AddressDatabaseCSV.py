@@ -42,7 +42,7 @@ class AddressDatabaseCSV(AddressContainerInterface):
         try:
             with open(self.filepath, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
-                for idx, row in enumerate(reader, start=1):
+                for row in reader:
                     try:
                         # Ensure no leading/trailing spaces in the emails
                         row['email'] = row['email'].strip() if row['email'] else ''
@@ -57,9 +57,9 @@ class AddressDatabaseCSV(AddressContainerInterface):
                             phone=row.get('phone'),
                             email=row['email']
                         )
-                        self.addresses[idx] = address
+                        self.addresses[int(row['id'])] = address  # Use ID from CSV as the key
                     except ValidationError as e:
-                        print(f"Error loading address at row {idx}: {e}")
+                        print(f"Error loading address with ID {row.get('id')}: {e}")
                         continue
         except FileNotFoundError:
             print(f"File {self.filepath} not found. Initializing empty dictionary.")
@@ -70,12 +70,13 @@ class AddressDatabaseCSV(AddressContainerInterface):
         Saves the current address entries back into the CSV file, overwriting the previous contents.
         """
         with open(self.filepath, mode='w', newline='', encoding='utf-8') as file:
-            fieldnames = ['firstname', 'lastname', 'street', 'number', 'postal_code', 'place', 'birthdate', 'phone',
-                          'email']
+            fieldnames = ['id', 'firstname', 'lastname', 'street', 'number', 'postal_code', 'place', 'birthdate',
+                          'phone', 'email']
             writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
+            writer.writeheader()  # This writes the header
             for id_, address in self.addresses.items():
                 writer.writerow({
+                    'id': id_,
                     'firstname': address.firstname,
                     'lastname': address.lastname,
                     'street': address.street,
@@ -91,6 +92,7 @@ class AddressDatabaseCSV(AddressContainerInterface):
         """
         Clears the internal dictionary of addresses, releasing any memory or resources.
         """
+        self.save()
         self.addresses.clear()
 
     def search(self, field: str, search_string: str) -> Dict[int, Address]:

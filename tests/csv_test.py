@@ -10,8 +10,9 @@ class TestAddressDatabaseCSV(unittest.TestCase):
         self.db = AddressDatabaseCSV()
 
     @patch('builtins.open', new_callable=mock_open,
-           read_data='firstname,lastname,street,number,postal_code,place,birthdate,phone,email\nJohn,Doe,,,12345,,,'
-                     '01-01-1990,123@gmail.com\nJane,Smith,,,67890,,,02-02-1990,123@gmail.com\n')
+           read_data='id,firstname,lastname,street,number,postal_code,place,birthdate,phone,email\n'
+                     '1,John,Doe,,,12345,,1990-01-01,123@gmail.com\n'
+                     '2,Jane,Smith,,,67890,,1990-02-02,123@gmail.com\n')
     def test_open(self, mock_file):
         self.db.set_filepath('test.csv')
         self.db.open()
@@ -27,8 +28,10 @@ class TestAddressDatabaseCSV(unittest.TestCase):
         self.db.save()
         handle = mock_file()
         written_data = ''.join([call[0][0] for call in handle.write.call_args_list])
-        self.assertIn('firstname,lastname,street,number,postal_code,place,birthdate,phone,email', written_data.strip())
-        self.assertIn('John,Doe,,,,,,,123@gmail.com', written_data.strip())
+        # Check that the correct CSV header with 'id' was written
+        self.assertIn('id,firstname,lastname,street,number,postal_code,place,birthdate,phone,email', written_data.strip())
+        # Check that the data was written correctly
+        self.assertIn('1,John,Doe,,,,,,,123@gmail.com', written_data.strip())
 
     def test_add_address(self):
         address = Address(firstname='John', lastname='Doe', email='123@gmail.com')

@@ -19,6 +19,7 @@ def set_filepath(addressdb):
     filepath = input("Enter the new filepath: ")
     addressdb.set_filepath(filepath)
     print(f"Filepath set to: {filepath}")
+    addressdb.open()
 
 
 def add_address(address_db):
@@ -31,6 +32,9 @@ def add_address(address_db):
     birthdate = input("Enter Birthdate (YYYY-MM-DD): ")
     phone = input("Enter Phone Number: ")
     email = input("Enter Email: ")
+
+    if postal_code == "":
+        postal_code = None
 
     new_address = Address(
         firstname=firstname,
@@ -92,6 +96,11 @@ def show_all_addresses(address_db):
     print("All Addresses:")
     for id_, address in address_db.get_all().items():
         print(address)
+
+
+def show_a_address(address_db):
+    id_ = int(input("Enter the specific id"))
+    print(address_db.get(id_))
 
 
 def show_todays_birthdays(address_db):

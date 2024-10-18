@@ -19,7 +19,6 @@ This Address Book application allows users to manage their contacts efficiently.
 - Python 3.8+
 - `email_validator` library
 - `pydantic` library
-- `unittest` library (for testing)
 
 ## Installation
 

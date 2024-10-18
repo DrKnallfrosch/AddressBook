@@ -131,24 +131,26 @@ if __name__ == '__main__':
         display_menu()
         choice = input("Choose an option: ")
 
-        if choice == '0':
+        if choice == '1':
             set_filepath(address_db)
-        elif choice == '1':
+        elif choice == '2':
             add_address(address_db)
             address_db.save()
-        elif choice == '2':
-            search_address(address_db)
         elif choice == '3':
+            search_address(address_db)
+        elif choice == '4':
             update_address(address_db)
             address_db.save()
-        elif choice == '4':
+        elif choice == '5':
             delete_address(address_db)
             address_db.save()
-        elif choice == '5':
-            show_all_addresses(address_db)
         elif choice == '6':
-            show_todays_birthdays(address_db)
+            show_all_addresses(address_db)
         elif choice == '7':
+            show_a_address(address_db)
+        elif choice == '8':
+            show_todays_birthdays(address_db)
+        elif choice == '9':
             address_db.close()
             print("Exiting the program. Goodbye!")
             break

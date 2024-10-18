@@ -1,6 +1,7 @@
 from AddressBook.AddressContainerInterface import AddressContainerInterface
 from AddressBook.Address import Address
 from typing import Optional
+from os import path
 import sqlite3
 
 
@@ -48,6 +49,8 @@ class AddressDatabaseSQL(AddressContainerInterface):
             raise ValueError("Invalid File Format. Required: .db Database file")
 
         try:
+            if not path.exists(self.filepath):
+                print(f"File not found. Creating new Database: {self.filepath}")
 
             self.conn = sqlite3.connect(self.filepath)
             self.cursor = self.conn.cursor()
@@ -118,7 +121,7 @@ class AddressDatabaseSQL(AddressContainerInterface):
             self.conn.commit()
             return id_
         except sqlite3.Error as e:
-            print(e)
+            print(f"Error Code {e.sqlite_errorcode}: {e.sqlite_errorname}")
             return None
 
     def update(self, id_: int, **kwargs) -> int:

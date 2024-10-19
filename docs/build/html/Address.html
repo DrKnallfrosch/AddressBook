@@ -65,8 +65,8 @@
     <ul>
 <li><a class="reference internal" href="#">Address</a><ul>
 <li><a class="reference internal" href="#AddressBook.Address.Address"><code class="docutils literal notranslate"><span class="pre">Address</span></code></a><ul>
-<li><a class="reference internal" href="#AddressBook.Address.Address.get_validate_email"><code class="docutils literal notranslate"><span class="pre">Address.get_validate_email()</span></code></a></li>
 <li><a class="reference internal" href="#AddressBook.Address.Address.validate_birthdate"><code class="docutils literal notranslate"><span class="pre">Address.validate_birthdate()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.Address.Address.validate_email"><code class="docutils literal notranslate"><span class="pre">Address.validate_email()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -185,27 +185,6 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="AddressBook.Address.Address.get_validate_email">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_validate_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/Address.html#Address.get_validate_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.Address.Address.get_validate_email" title="Link to this definition">¶</a></dt>
-<dd><p>Validates the email address using the <cite>email_validator</cite> library.
-checks if the email format is valid and if the email is deliverable.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The email address to validate.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The validated email address, or None if the value is empty.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[str]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the email format is invalid.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="AddressBook.Address.Address.validate_birthdate">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate_birthdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/Address.html#Address.validate_birthdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.Address.Address.validate_birthdate" title="Link to this definition">¶</a></dt>
 <dd><p>Validates and converts the birthdate string into a <cite>datetime.date</cite> object.</p>
@@ -221,6 +200,27 @@ checks if the email format is valid and if the email is deliverable.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the birthdate string is not in the correct format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="AddressBook.Address.Address.validate_email">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/AddressBook/Address.html#Address.validate_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#AddressBook.Address.Address.validate_email" title="Link to this definition">¶</a></dt>
+<dd><p>Validates the email address using the <cite>email_validator</cite> library.
+checks if the email format is valid and if the email is deliverable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The email address to validate.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The validated email address, or None if the value is empty.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the email format is invalid.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -241,8 +241,8 @@ checks if the email format is valid and if the email is deliverable.</p>
     <ul>
 <li><a class="reference internal" href="#">Address</a><ul>
 <li><a class="reference internal" href="#AddressBook.Address.Address"><code class="docutils literal notranslate"><span class="pre">Address</span></code></a><ul>
-<li><a class="reference internal" href="#AddressBook.Address.Address.get_validate_email"><code class="docutils literal notranslate"><span class="pre">Address.get_validate_email()</span></code></a></li>
 <li><a class="reference internal" href="#AddressBook.Address.Address.validate_birthdate"><code class="docutils literal notranslate"><span class="pre">Address.validate_birthdate()</span></code></a></li>
+<li><a class="reference internal" href="#AddressBook.Address.Address.validate_email"><code class="docutils literal notranslate"><span class="pre">Address.validate_email()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -335,7 +335,7 @@ checks if the email format is valid and if the email is deliverable.</p>
     <div class="footer">
     &copy; 
     Copyright
-     2024, Tim Schuette, Dominik Elias Hase.
+     2024, DrKnallfrosch, D0ms.
     <br />
     This page is licensed under the Python Software Foundation License Version 2.
     <br />

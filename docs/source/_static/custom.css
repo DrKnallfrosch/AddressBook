@@ -1,6 +1,6 @@
 { % extends "!classic.css" % }
       div.viewcode-block:target {
-      background-color: rgba(244, 222, 191, 0.45);
+      background-color: rgba(244, 222, 191, 0.25);
       border-top: 1px solid #ac9;
       border-bottom: 1px solid #ac9;
   }

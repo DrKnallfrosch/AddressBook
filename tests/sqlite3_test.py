@@ -21,43 +21,50 @@ class TestAddressSQLite(unittest.TestCase):
         self.assertEqual(str(context.exception), "Invalid File Format. Required: .db Database file")
 
     def test_add_address(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         new_id = self.db.add_address(address)
         self.assertEqual(new_id, 1)
 
     def test_is_duplicate(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         self.db.add_address(address)
         self.assertTrue(self.db.is_duplicate(address))
 
     def test_get_all(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         self.db.add_address(address)
         all_addresses = self.db.get_all()
         self.assertEqual(len(all_addresses), 1)
         self.assertIn(1, all_addresses)
 
     def test_get(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         new_id = self.db.add_address(address)
         fetched_address = self.db.get(new_id)
         self.assertEqual(fetched_address.firstname, 'John')
 
     def test_search(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         self.db.add_address(address)
         results = self.db.search('John', 'firstname')
         self.assertEqual(len(results), 1)
         self.assertIn(1, results)
 
     def test_delete(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         new_id = self.db.add_address(address)
         self.db.delete(new_id)
         self.assertIsNone(self.db.get(new_id))
 
     def test_update(self):
-        address = Address(firstname='John', lastname='Doe', email='123@gmail.com')
+        address = Address(firstname='John', lastname='Doe', street='Muster', number='12a', postal_code=1,
+                          place='bremen', birthdate='2000-01-01', phone='0123456789',email='123@gmail.com')
         new_id = self.db.add_address(address)
         self.db.update(new_id, firstname='Jane')
         updated_address = self.db.get(new_id)

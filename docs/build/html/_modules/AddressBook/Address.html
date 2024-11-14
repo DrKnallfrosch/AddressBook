@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../../_static/pydoctheme.css?v=41b4f12d" />
     <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../../_static/pygments_dark.css?v=b20cc3f5" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=1448364d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=b4937021" />
     
     <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
@@ -190,10 +190,10 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid birthdate format: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Address.get_validate_email">
-<a class="viewcode-back" href="../../Address.html#AddressBook.Address.Address.get_validate_email">[docs]</a>
+<div class="viewcode-block" id="Address.validate_email">
+<a class="viewcode-back" href="../../Address.html#AddressBook.Address.Address.validate_email">[docs]</a>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">get_validate_email</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">validate_email</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validates the email address using the `email_validator` library.</span>
 <span class="sd">        checks if the email format is valid and if the email is deliverable.</span>
@@ -294,7 +294,7 @@
     <div class="footer">
     &copy; 
     Copyright
-     2024, Tim Schuette, Dominik Elias Hase.
+     2024, DrKnallfrosch, D0ms.
     <br />
     This page is licensed under the Python Software Foundation License Version 2.
     <br />

@@ -14,8 +14,8 @@ sys.path.insert(0, os.path.abspath('../..'))
 
 
 project = 'Address'
-copyright = '2024, Tim Schuette, Dominik Elias Hase'
-author = 'Tim Schuette, Dominik Elias Hase'
+copyright = '2024, DrKnallfrosch, D0ms'
+author = 'DrKnallfrosch, D0ms'
 release = '1.0'
 
 # -- General configuration ---------------------------------------------------

@@ -39,10 +39,12 @@ class Address:
     number: Optional[str] = field(default=None)
     postal_code: Optional[PositiveInt] = field(default=None)
     place: Optional[str] = field(default=None)
-    birthdate: Optional[str] = field(default=None)
+    birthdate: Optional[date] = field(default=None)
     phone: Optional[str] = field(default=None)
     email: Optional[str] = field(default=None)
 
+
+    '''
     @field_validator('birthdate')
     def validate_birthdate(cls, value) -> Optional[date]:
         """
@@ -59,6 +61,7 @@ class Address:
             return datetime.strptime(value, "%Y-%m-%d").date()
         except ValueError:
             raise ValueError(f"Invalid birthdate format: {value}")
+    '''
 
     @field_validator('email')
     def validate_email(cls, value: Optional[str]) -> Optional[str]:
@@ -74,10 +77,11 @@ class Address:
         if value is None or value == '':
             return None  # Return None if email is empty or missing
         try:
-            validate_email(value, check_deliverability=True)
+            # validate_email(value, check_deliverability=True)
             return value
         except EmailNotValidError as e:
             raise ValueError(f"Invalid email format: {value}")
+
 
     def __str__(self):
         """

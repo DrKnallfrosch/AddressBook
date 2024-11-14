@@ -1,3 +1,4 @@
+from datetime import date
 from AddressBook.AddressContainerInterface import AddressContainerInterface
 from AddressBook.Address import Address
 from typing import Optional
@@ -23,19 +24,19 @@ class AddressDatabaseSQL(AddressContainerInterface):
         self.filepath = None
         self.conn = None
         self.cursor = None
-        self.tablename = "Address"
+        self.tablename = "addressbook" # NOTE: changed to fit with the given databases
 
     def set_filepath(self, filepath: str):
         """
         Set the file path for the SQL-Database that contains the address data.
-        Ensures a .db file is used.
+        Ensures a valid file is used.
 
         :param str filepath: The path to the SQL-Database file.
         """
-        if filepath.lower().endswith(".db"):
+        if filepath.lower().endswith(".db") or filepath.lower().endswith(".sqlite"): # NOTE: added .sqlite
             self.filepath = filepath
         else:
-            raise ValueError("Invalid File Format. Required: .db Database file")
+            raise ValueError("Invalid File Format. Required: .db or .sqlite Database file")
 
     def open(self):
         """
@@ -98,10 +99,12 @@ class AddressDatabaseSQL(AddressContainerInterface):
         if field and field not in columns:
             raise ValueError(f"Invalid field: '{field}'. Must be one of {columns}.")
         elif field:
-            query = f"SELECT * FROM {self.tablename} WHERE {field} LIKE ?;"
+            query = (f"SELECT id, firstname, lastname, street, number, postal_code,"
+                     f"place, birthdate, phone, email FROM {self.tablename} WHERE {field} LIKE ?;")
             self.cursor.execute(query, (f"%{search_string}%",))
         else:
-            query = f"SELECT * FROM {self.tablename} WHERE " + " OR ".join(
+            query = (f"SELECT id, firstname, lastname, street, number, postal_code,"
+                     f"place, birthdate, phone, email FROM {self.tablename} WHERE ") + " OR ".join(
                 [f"{col} LIKE ?" for col in columns]
             ) + ";"
             search_params = [f"%{search_string}%"] * len(columns)
@@ -117,7 +120,10 @@ class AddressDatabaseSQL(AddressContainerInterface):
         :rtype: int, None
         """
         try:
-            self.cursor.execute(f"DELETE FROM {self.tablename} WHERE id = {id_}")
+            self.cursor.execute(f"DELETE FROM {self.tablename} WHERE id = ?", (id_,))
+            if self.cursor.rowcount == 0:
+                print("No record found with the specified ID.")
+                return None
             self.conn.commit()
             return id_
         except sqlite3.Error as e:
@@ -151,9 +157,9 @@ class AddressDatabaseSQL(AddressContainerInterface):
         :return: The ID of the newly added address, 0 if an error occurs or -1 if it already exists.
         :rtype: int
         """
-        if self.is_duplicate(address):
-            print("This address book entry already exists.")
-            return -1
+        #if self.is_duplicate(address):
+        #    print("This address book entry already exists.")
+        #    return -1
 
         try:
             self.cursor.execute(f'''
@@ -184,7 +190,8 @@ class AddressDatabaseSQL(AddressContainerInterface):
         :return: A dictionary where keys are IDs and values are AddressBook objects.
         :rtype: dict[int, Address]
         """
-        self.cursor.execute(f"SELECT * FROM {self.tablename}")
+        self.cursor.execute(f"SELECT id, firstname, lastname, street, number, postal_code,"
+                            f"place, birthdate, phone, email FROM {self.tablename}")
         return {elements[0]: Address(*elements[1:]) for elements in self.cursor.fetchall()}
 
     def get(self, id_: int) -> Optional[Address]:
@@ -195,7 +202,8 @@ class AddressDatabaseSQL(AddressContainerInterface):
         :return: The address if found, otherwise None.
         :rtype: Address, None
         """
-        self.cursor.execute(f"SELECT * FROM {self.tablename} WHERE id = {id_}")
+        self.cursor.execute(f"SELECT id, firstname, lastname, street, number, postal_code,"
+                            f"place, birthdate, phone, email FROM {self.tablename} WHERE id = {id_}")
         result = self.cursor.fetchone()
         if result:
             return Address(*result[1:])
@@ -208,8 +216,9 @@ class AddressDatabaseSQL(AddressContainerInterface):
         :return: A dictionary where keys are IDs and values are Address objects with matching birthdays.
         :rtype: dict[int, Address]:
         """
-        self.cursor.execute(f"SELECT * FROM {self.tablename} "
-                            f"WHERE strftime('%m-%d', birthdate) = strftime('%m-%d', 'now');")
+        self.cursor.execute(f"SELECT id, firstname, lastname, street, number, postal_code,"
+                            f"place, birthdate, phone, email FROM {self.tablename} "
+                            f"WHERE strftime('%m-%d', birthdate) = '{date.today().strftime('%m-%d')}';")
         return {elements[0]: Address(*elements[1:]) for elements in self.cursor.fetchall()}
 
     def setup_table(self):
@@ -224,13 +233,17 @@ class AddressDatabaseSQL(AddressContainerInterface):
                 firstname TEXT NOT NULL,
                 lastname TEXT NOT NULL,
                 street TEXT,
-                number INTEGER,
+                number TEXT,
                 postal_code TEXT,
                 place TEXT,
                 birthdate TEXT,
                 phone TEXT,
                 email TEXT);
         ''')
+        try:
+            self.cursor.execute(f'''ALTER TABLE {self.tablename} RENAME COLUMN "birthday" to "birthdate";''')
+        except sqlite3.Error as e:
+            pass
         self.conn.commit()
 
     def is_duplicate(self, address: Address) -> bool:

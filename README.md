@@ -30,7 +30,7 @@ This Address Book application allows users to manage their contacts efficiently.
 
 2. Install the required Python packages:
     ```sh
-    pip install -r requirements.txt
+    pip install -r req.txt
     ```
 
 ## Usage
